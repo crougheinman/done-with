@@ -8,20 +8,34 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../theme/colors";
 import metrics from "../theme/metrics";
 import defaultStyles from "../theme/styles";
+import { useAuth } from "../contexts/AuthContext";
 
-function LoginPage() {
+function LoginPage({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    // TODO: Implement login logic
-    console.log("Login attempted with:", { username, password });
+  const { login, isLoading, error } = useAuth();
+
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    const result = await login(username, password);
+    if (result.success) {
+      Alert.alert("Success", "Welcome!");
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Error", result.error || "Login failed");
+    }
   };
 
   return (
@@ -63,10 +77,17 @@ function LoginPage() {
           </View>
 
           <TouchableOpacity
-            style={[defaultStyles.button, styles.button]}
+            style={[
+              defaultStyles.button,
+              styles.button,
+              isLoading && { opacity: 0.7 },
+            ]}
             onPress={handleLogin}
+            disabled={isLoading}
           >
-            <Text style={defaultStyles.buttonText}>Log In</Text>
+            <Text style={defaultStyles.buttonText}>
+              {isLoading ? "Logging in..." : "Log In"}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.forgotPassword}>

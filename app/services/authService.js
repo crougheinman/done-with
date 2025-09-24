@@ -1,63 +1,61 @@
-// Mock user accounts for testing
-const users = [
-  {
-    id: 1,
-    email: "john.doe@example.com",
-    password: "password123",
-    name: "John Doe",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
-  },
-  {
-    id: 2,
-    email: "jane.smith@example.com",
-    password: "securepass456",
-    name: "Jane Smith",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-  {
-    id: 3,
-    email: "mike.wilson@example.com",
-    password: "mikepass789",
-    name: "Mike Wilson",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-  },
-  {
-    id: 4,
-    email: "sarah.brown@example.com",
-    password: "sarah2023",
-    name: "Sarah Brown",
-    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
-  },
-  {
-    id: 5,
-    email: "alex.chen@example.com",
-    password: "alexpass321",
-    name: "Alex Chen",
-    avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-  },
-];
+import firestoreService from "./firestoreService.js";
 
-// Login function that checks if the provided credentials match any user
-const login = (email, password) => {
-  const user = users.find(
-    (user) => user.email === email && user.password === password
-  );
+// Login function that checks credentials against Firestore only
+const login = async (email, password) => {
+  try {
+    // Check user exists in Firestore
+    const user = await firestoreService.getUserByEmail(email);
 
-  if (!user) {
+    if (user && user.password === password) {
+      // Remove password from the returned user object for security
+      const { password: _, ...userWithoutPassword } = user;
+      return { success: true, user: userWithoutPassword };
+    }
+
     return { success: false, error: "Invalid email or password" };
+  } catch (error) {
+    console.error("Login error:", error);
+    return { success: false, error: "Login failed. Please try again." };
   }
+};
 
-  // Remove password from the returned user object for security
-  const { password: _, ...userWithoutPassword } = user;
-  return { success: true, user: userWithoutPassword };
+// Register a new user
+const register = async (userData) => {
+  try {
+    // Check if user already exists
+    const existingUser = await firestoreService.getUserByEmail(userData.email);
+    if (existingUser) {
+      return { success: false, error: "Email already registered" };
+    }
+
+    // Create user in Firestore
+    const userId = await firestoreService.createUser(userData);
+
+    // Return user data without password
+    const { password: _, ...userWithoutPassword } = userData;
+    return {
+      success: true,
+      user: { id: userId, ...userWithoutPassword },
+    };
+  } catch (error) {
+    console.error("Registration error:", error);
+    return { success: false, error: "Registration failed. Please try again." };
+  }
 };
 
 // Check if email exists (could be used for registration validation)
-const isEmailTaken = (email) => {
-  return users.some((user) => user.email === email);
+const isEmailTaken = async (email) => {
+  try {
+    const user = await firestoreService.getUserByEmail(email);
+    return !!user;
+  } catch (error) {
+    console.error("Email check error:", error);
+    return false;
+  }
 };
 
 export default {
   login,
+  register,
   isEmailTaken,
 };

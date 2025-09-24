@@ -23,6 +23,7 @@ function WelcomePage({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[defaultStyles.button, styles.buttonSecondary]}
+            onPress={() => navigation.navigate("SignUp")}
           >
             <Text
               style={[defaultStyles.buttonText, styles.buttonSecondaryText]}

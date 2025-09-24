@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    match /expenses/{document=**} {
+      allow read, write, create, update, delete: if isAuthenticated();
+    }
+  
+    match /inventory/{document=**} {
+      allow read, write, create, update, delete: if isAuthenticated();
+    }
+  
+    match /bills/{document=**} {
+      allow read, write, create, update, delete: if isAuthenticated();
+    }    
+  
+    match /users/{document=**} {
+      allow read, write, create, update, delete;
+    } 
+
+    // Users collection - users can read/write their own data
+    match /users/{userId} {
+      // Allow read/write for authenticated users on their own documents
+      allow read, create, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Items collection - for marketplace listings
+    match /items/{itemId} {
+      // Allow anyone to read items (for browsing marketplace)
+      allow read: if true;
+
+      // Allow authenticated users to create items
+      // Allow users to modify only their own items
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null &&
+        request.auth.uid == resource.data.sellerId;
+    }
+
+    // Categories collection - public read access
+    match /categories/{categoryId} {
+      // Allow anyone to read categories
+      allow read: if true;
+
+      // Only allow admin users to modify categories (you can implement admin logic)
+      allow write: if false; // Disable writes for now, enable when you have admin system
+    }
+  }
+}
+
+function isAuthenticated() {
+	return request.auth != null && request.auth.uid != null;
+}

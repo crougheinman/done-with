@@ -96,10 +96,12 @@ function LoginPage({ navigation }) {
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Don't have an account?{" "}
-            <Text style={styles.signupText}>Sign up</Text>
-          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.footerText}>
+              Don't have an account?{" "}
+              <Text style={styles.signupText}>Sign up</Text>
+            </Text>
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

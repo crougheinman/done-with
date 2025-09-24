@@ -149,6 +149,11 @@ class FirestoreService {
         q = query(q, limit(options.limit));
       }
 
+      // Apply startAfter for pagination
+      if (options.startAfter) {
+        q = query(q, startAfter(options.startAfter));
+      }
+
       const querySnapshot = await getDocs(q);
       const documents = [];
 
@@ -156,6 +161,7 @@ class FirestoreService {
         documents.push({
           id: doc.id,
           ...doc.data(),
+          _docRef: doc, // Store document reference for pagination
         });
       });
 

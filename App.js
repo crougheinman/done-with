@@ -7,13 +7,19 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faBriefcase,
+  faUser,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { AuthProvider, useAuth } from "./app/contexts/AuthContext";
 import WelcomePage from "./app/pages/WelcomePage";
 import LoginPage from "./app/pages/LoginPage";
 import SignUpPage from "./app/pages/SignUpPage";
 import JobSearchScreen from "./app/pages/JobSearchScreen";
 import ProfileScreen from "./app/pages/ProfileScreen";
+import SavedJobsScreen from "./app/pages/SavedJobsScreen";
 import colors from "./app/theme/colors";
 
 const Stack = createNativeStackNavigator();
@@ -28,15 +34,14 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
           if (route.name === "JobSearch") {
-            iconName = focused ? "briefcase" : "briefcase-outline";
+            return <FontAwesomeIcon icon={faBriefcase} size={size} color={color} />;
+          } else if (route.name === "SavedJobs") {
+            return <FontAwesomeIcon icon={faHeart} size={size} color={color} />;
           } else if (route.name === "Profile") {
-            iconName = focused ? "person" : "person-outline";
+            return <FontAwesomeIcon icon={faUser} size={size} color={color} />;
           }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return null;
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
@@ -59,6 +64,13 @@ function MainTabs() {
         component={JobSearchScreen}
         options={{
           title: "Job Search",
+        }}
+      />
+      <Tab.Screen
+        name="SavedJobs"
+        component={SavedJobsScreen}
+        options={{
+          title: "Saved",
         }}
       />
       <Tab.Screen

@@ -11,6 +11,8 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import colors from "../theme/colors";
 import metrics from "../theme/metrics";
 import defaultStyles from "../theme/styles";
@@ -72,7 +74,11 @@ function LoginPage({ navigation }) {
               style={styles.eyeButton}
               onPress={() => setShowPassword(!showPassword)}
             >
-              <Text style={styles.eyeIcon}>{showPassword ? "👁" : "👁‍🗨"}</Text>
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                size={20}
+                color={colors.textSecondary}
+              />
             </TouchableOpacity>
           </View>
 
@@ -146,10 +152,6 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  eyeIcon: {
-    fontSize: 20,
-    opacity: 0.6,
   },
   button: {
     marginTop: metrics.spacing.m,

@@ -22,6 +22,7 @@ function SignUpPage({ navigation }) {
     email: "",
     password: "",
     confirmPassword: "",
+    userType: "applicant", // Default to applicant
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -58,6 +59,13 @@ function SignUpPage({ navigation }) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    if (
+      !formData.userType ||
+      !["applicant", "employer"].includes(formData.userType)
+    ) {
+      newErrors.userType = "Please select a user type";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -87,6 +95,7 @@ function SignUpPage({ navigation }) {
         name: formData.fullName.trim(),
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
+        userType: formData.userType,
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
           formData.fullName
         )}&background=random`,
@@ -100,7 +109,7 @@ function SignUpPage({ navigation }) {
         Alert.alert("Success!", "Your account has been created successfully!", [
           {
             text: "Continue",
-            onPress: () => navigation.navigate("Home"),
+            onPress: () => navigation.navigate("MainTabs"),
           },
         ]);
         // Clear form
@@ -227,6 +236,52 @@ function SignUpPage({ navigation }) {
               )}
             </View>
 
+            {/* User Type Selection */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>I am a:</Text>
+              <View style={styles.userTypeContainer}>
+                <TouchableOpacity
+                  style={[
+                    styles.userTypeButton,
+                    formData.userType === "applicant" &&
+                      styles.userTypeButtonActive,
+                  ]}
+                  onPress={() => handleInputChange("userType", "applicant")}
+                >
+                  <Text
+                    style={[
+                      styles.userTypeButtonText,
+                      formData.userType === "applicant" &&
+                        styles.userTypeButtonTextActive,
+                    ]}
+                  >
+                    Job Applicant
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.userTypeButton,
+                    formData.userType === "employer" &&
+                      styles.userTypeButtonActive,
+                  ]}
+                  onPress={() => handleInputChange("userType", "employer")}
+                >
+                  <Text
+                    style={[
+                      styles.userTypeButtonText,
+                      formData.userType === "employer" &&
+                        styles.userTypeButtonTextActive,
+                    ]}
+                  >
+                    Employer
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {errors.userType && (
+                <Text style={styles.errorText}>{errors.userType}</Text>
+              )}
+            </View>
+
             {/* Sign Up Button */}
             <TouchableOpacity
               style={[
@@ -322,6 +377,37 @@ const styles = StyleSheet.create({
   loginTextBold: {
     color: colors.primary,
     fontWeight: "bold",
+  },
+  label: {
+    fontSize: metrics.text.regular,
+    fontWeight: "600",
+    color: colors.textPrimary,
+    marginBottom: metrics.spacing.s,
+  },
+  userTypeContainer: {
+    flexDirection: "row",
+    gap: metrics.spacing.m,
+  },
+  userTypeButton: {
+    flex: 1,
+    padding: metrics.spacing.m,
+    borderRadius: metrics.borderRadius.m,
+    borderWidth: 2,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+  },
+  userTypeButtonActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primaryLight || colors.primary + "20",
+  },
+  userTypeButtonText: {
+    fontSize: metrics.text.regular,
+    fontWeight: "600",
+    color: colors.textSecondary,
+  },
+  userTypeButtonTextActive: {
+    color: colors.primary,
   },
 });
 

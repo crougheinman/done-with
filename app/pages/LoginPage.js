@@ -32,7 +32,7 @@ function LoginPage({ navigation }) {
     const result = await login(username, password);
     if (result.success) {
       Alert.alert("Success", "Welcome!");
-      navigation.navigate("Home");
+      navigation.navigate("MainTabs");
     } else {
       Alert.alert("Error", result.error || "Login failed");
     }

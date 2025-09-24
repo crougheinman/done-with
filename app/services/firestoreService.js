@@ -15,6 +15,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "./firebase.js";
+import User from "../models/User.js";
 
 class FirestoreService {
   constructor() {
@@ -171,43 +172,52 @@ class FirestoreService {
 
   /**
    * Create a new user
-   * @param {object} userData - User data
+   * @param {User|object} userData - User data (User instance or plain object)
    * @returns {Promise<string>} User ID
    */
   async createUser(userData) {
-    return this.create("users", userData);
+    const user = userData instanceof User ? userData : new User(userData);
+    const firestoreData = user.toFirestore();
+    return this.create("users", firestoreData);
   }
 
   /**
    * Get user by ID
    * @param {string} userId - User ID
-   * @returns {Promise<object|null>} User data
+   * @returns {Promise<User|null>} User instance or null
    */
   async getUser(userId) {
-    return this.read("users", userId);
+    const userData = await this.read("users", userId);
+    return userData ? User.fromFirestore(userData, userId) : null;
   }
 
   /**
    * Get user by email
    * @param {string} email - User email
-   * @returns {Promise<object|null>} User data
+   * @returns {Promise<User|null>} User instance or null
    */
   async getUserByEmail(email) {
     const users = await this.getAll("users", {
       where: [{ field: "email", operator: "==", value: email }],
       limit: 1,
     });
-    return users.length > 0 ? users[0] : null;
+    if (users.length > 0) {
+      const userData = users[0];
+      return User.fromFirestore(userData, userData.id);
+    }
+    return null;
   }
 
   /**
    * Update user
    * @param {string} userId - User ID
-   * @param {object} userData - Updated user data
+   * @param {User|object} userData - Updated user data (User instance or plain object)
    * @returns {Promise<void>}
    */
   async updateUser(userId, userData) {
-    return this.update("users", userId, userData);
+    const user = userData instanceof User ? userData : new User(userData);
+    const firestoreData = user.toFirestore();
+    return this.update("users", userId, firestoreData);
   }
 
   /**
@@ -220,27 +230,13 @@ class FirestoreService {
   }
 
   // ===========================
-  // ITEM-SPECIFIC OPERATIONS
+  // CATEGORY OPERATIONS
   // ===========================
-
-  /**
-   * Create a new item for sale
-   * @param {object} itemData - Item data
-   * @returns {Promise<string>} Item ID
-   */
-  async createItem(itemData) {
-    return this.create("items", itemData);
-  }
-
   /**
    * Get item by ID
    * @param {string} itemId - Item ID
    * @returns {Promise<object|null>} Item data
    */
-  async getItem(itemId) {
-    return this.read("items", itemId);
-  }
-
   /**
    * Get all items with optional filters
    * @param {object} filters - Filter options
@@ -300,20 +296,6 @@ class FirestoreService {
    */
   async getUserItems(userId) {
     return this.getItems({ sellerId: userId });
-  }
-
-  // ===========================
-  // CATEGORY OPERATIONS
-  // ===========================
-
-  /**
-   * Get all categories
-   * @returns {Promise<Array>} Array of categories
-   */
-  async getCategories() {
-    return this.getAll("categories", {
-      orderBy: { field: "name", direction: "asc" },
-    });
   }
 
   // ===========================

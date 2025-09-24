@@ -19,6 +19,30 @@ function HomePage({ navigation }) {
       <View style={styles.content}>
         <Text style={styles.welcomeText}>Welcome to DoneWithIt!</Text>
         <Text style={styles.userText}>Hello, {user?.name || "User"}!</Text>
+        <Text style={styles.userTypeText}>
+          You are registered as:{" "}
+          {user?.userType === "employer" ? "Employer" : "Job Applicant"}
+        </Text>
+
+        <View style={styles.userTypeContainer}>
+          {user?.userType === "employer" ? (
+            <View style={styles.infoCard}>
+              <Text style={styles.cardTitle}>Employer Dashboard</Text>
+              <Text style={styles.cardText}>
+                Post job listings, review applications, and find the perfect
+                candidates.
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.infoCard}>
+              <Text style={styles.cardTitle}>Job Seeker Dashboard</Text>
+              <Text style={styles.cardText}>
+                Browse job listings, apply for positions, and manage your
+                applications.
+              </Text>
+            </View>
+          )}
+        </View>
 
         <TouchableOpacity
           style={[defaultStyles.button, styles.button]}
@@ -51,8 +75,41 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: metrics.text.large,
     color: colors.textSecondary,
+    marginBottom: metrics.spacing.m,
+    textAlign: "center",
+  },
+  userTypeText: {
+    fontSize: metrics.text.regular,
+    color: colors.primary,
+    fontWeight: "600",
     marginBottom: metrics.spacing.xl,
     textAlign: "center",
+  },
+  userTypeContainer: {
+    width: "100%",
+    maxWidth: 350,
+    marginBottom: metrics.spacing.xl,
+  },
+  infoCard: {
+    backgroundColor: colors.surface,
+    borderRadius: metrics.borderRadius.m,
+    padding: metrics.spacing.l,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+  },
+  cardTitle: {
+    fontSize: metrics.text.large,
+    fontWeight: "bold",
+    color: colors.textPrimary,
+    marginBottom: metrics.spacing.s,
+    textAlign: "center",
+  },
+  cardText: {
+    fontSize: metrics.text.regular,
+    color: colors.textSecondary,
+    textAlign: "center",
+    lineHeight: metrics.text.regular * 1.4,
   },
   button: {
     marginTop: metrics.spacing.l,

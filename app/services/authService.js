@@ -1,4 +1,5 @@
 import firestoreService from "./firestoreService.js";
+import User from "../models/User.js";
 
 // Login function that checks credentials against Firestore only
 const login = async (email, password) => {
@@ -7,9 +8,8 @@ const login = async (email, password) => {
     const user = await firestoreService.getUserByEmail(email);
 
     if (user && user.password === password) {
-      // Remove password from the returned user object for security
-      const { password: _, ...userWithoutPassword } = user;
-      return { success: true, user: userWithoutPassword };
+      // Return user data without password for security
+      return { success: true, user: user.toPublicData() };
     }
 
     return { success: false, error: "Invalid email or password" };
@@ -22,6 +22,14 @@ const login = async (email, password) => {
 // Register a new user
 const register = async (userData) => {
   try {
+    // Create User instance and validate
+    const user = new User(userData);
+    const validation = user.validateForRegistration();
+
+    if (!validation.isValid) {
+      return { success: false, error: validation.errors.join(", ") };
+    }
+
     // Check if user already exists
     const existingUser = await firestoreService.getUserByEmail(userData.email);
     if (existingUser) {
@@ -29,13 +37,13 @@ const register = async (userData) => {
     }
 
     // Create user in Firestore
-    const userId = await firestoreService.createUser(userData);
+    const userId = await firestoreService.createUser(user);
 
     // Return user data without password
-    const { password: _, ...userWithoutPassword } = userData;
+    const newUser = new User({ ...userData, id: userId });
     return {
       success: true,
-      user: { id: userId, ...userWithoutPassword },
+      user: newUser.toPublicData(),
     };
   } catch (error) {
     console.error("Registration error:", error);

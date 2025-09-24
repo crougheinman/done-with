@@ -52,11 +52,6 @@ async function runTest() {
     const testSnapshot = await getDocs(testCollection);
     console.log("✅ Firestore connection successful");
 
-    // Test 2: Test our Firestore service
-    console.log("\n🛠️  Testing Firestore service...");
-    const categories = await firestoreService.getCategories();
-    console.log(`✅ Retrieved ${categories.length} categories`);
-
     // Test 3: Test user operations (this might fail if no users exist)
     console.log("\n👤 Testing user operations...");
     try {

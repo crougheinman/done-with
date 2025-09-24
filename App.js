@@ -35,7 +35,9 @@ function MainTabs() {
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === "JobSearch") {
-            return <FontAwesomeIcon icon={faBriefcase} size={size} color={color} />;
+            return (
+              <FontAwesomeIcon icon={faBriefcase} size={size} color={color} />
+            );
           } else if (route.name === "SavedJobs") {
             return <FontAwesomeIcon icon={faHeart} size={size} color={color} />;
           } else if (route.name === "Profile") {

@@ -7,12 +7,7 @@ import metrics from "../theme/metrics";
 import defaultStyles from "../theme/styles";
 
 function JobSearchScreen({ navigation }) {
-  const { user, logout } = useAuth();
-
-  const handleLogout = async () => {
-    await logout();
-    navigation.navigate("Welcome");
-  };
+  const { user } = useAuth();
 
   return (
     <SafeAreaView style={[defaultStyles.container, styles.container]}>
@@ -36,13 +31,6 @@ function JobSearchScreen({ navigation }) {
             jobs, and track your applications.
           </Text>
         </View>
-
-        <TouchableOpacity
-          style={[defaultStyles.button, styles.button]}
-          onPress={handleLogout}
-        >
-          <Text style={defaultStyles.buttonText}>Logout</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -94,9 +82,6 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: "center",
     lineHeight: 24,
-  },
-  button: {
-    marginTop: metrics.spacing.l,
   },
 });
 

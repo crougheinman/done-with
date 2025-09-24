@@ -16,6 +16,12 @@ function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[defaultStyles.container, styles.container]}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.content}>
         <Text style={styles.title}>Profile</Text>
         <Text style={styles.subtitle}>Manage your account</Text>
@@ -53,13 +59,6 @@ function ProfileScreen({ navigation }) {
             management features will be available here.
           </Text>
         </View>
-
-        <TouchableOpacity
-          style={[defaultStyles.button, styles.button]}
-          onPress={handleLogout}
-        >
-          <Text style={defaultStyles.buttonText}>Logout</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -68,6 +67,22 @@ function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: metrics.spacing.m,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: metrics.spacing.m,
+  },
+  logoutButton: {
+    backgroundColor: colors.error,
+    paddingHorizontal: metrics.spacing.m,
+    paddingVertical: metrics.spacing.s,
+    borderRadius: metrics.borderRadius.s,
+  },
+  logoutButtonText: {
+    color: colors.secondary,
+    fontSize: metrics.text.regular,
+    fontWeight: "600",
   },
   content: {
     flex: 1,

@@ -19,11 +19,12 @@ class JobPostings {
     this.applicationVolume = data.applicationVolume || null;
     this.skills = data.skills || [];
     this.responsibilities = data.responsibilities || [];
-    this.requirements = data.requirements || [];
+    this.requirements = this.requirements || [];
     this.educationRequirement = data.educationRequirement || null;
     this.experienceRequirement = data.experienceRequirement || null;
     this.benefits = data.benefits || [];
     this.additionalNotes = data.additionalNotes || null;
+    this.employerId = data.employerId || null; // ID of the employer who posted the job
     this.createdAt = data.createdAt || null;
     this.updatedAt = data.updatedAt || null;
   }
@@ -91,6 +92,9 @@ class JobPostings {
     }
     if (this.additionalNotes) {
       data.additionalNotes = this.additionalNotes;
+    }
+    if (this.employerId) {
+      data.employerId = this.employerId;
     }
 
     // Include timestamps if they exist, converting Date objects to Timestamps

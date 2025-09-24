@@ -12,6 +12,7 @@ import {
   faBriefcase,
   faUser,
   faHeart,
+  faBuilding,
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthProvider, useAuth } from "./app/contexts/AuthContext";
 import WelcomePage from "./app/pages/WelcomePage";
@@ -20,6 +21,7 @@ import SignUpPage from "./app/pages/SignUpPage";
 import JobSearchScreen from "./app/pages/JobSearchScreen";
 import ProfileScreen from "./app/pages/ProfileScreen";
 import SavedJobsScreen from "./app/pages/SavedJobsScreen";
+import MyJobPostingsScreen from "./app/pages/MyJobPostingsScreen";
 import colors from "./app/theme/colors";
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +30,7 @@ const Tab = createBottomTabNavigator();
 // Main app tabs for authenticated users
 function MainTabs() {
   const insets = useSafeAreaInsets();
+  const { user } = useAuth();
 
   return (
     <Tab.Navigator
@@ -40,6 +43,10 @@ function MainTabs() {
             );
           } else if (route.name === "SavedJobs") {
             return <FontAwesomeIcon icon={faHeart} size={size} color={color} />;
+          } else if (route.name === "MyJobPostings") {
+            return (
+              <FontAwesomeIcon icon={faBuilding} size={size} color={color} />
+            );
           } else if (route.name === "Profile") {
             return <FontAwesomeIcon icon={faUser} size={size} color={color} />;
           }
@@ -61,20 +68,35 @@ function MainTabs() {
         },
       })}
     >
-      <Tab.Screen
-        name="JobSearch"
-        component={JobSearchScreen}
-        options={{
-          title: "Job Search",
-        }}
-      />
-      <Tab.Screen
-        name="SavedJobs"
-        component={SavedJobsScreen}
-        options={{
-          title: "Saved",
-        }}
-      />
+      {/* Show different tabs based on user type */}
+      {user?.isApplicant() ? (
+        <>
+          <Tab.Screen
+            name="JobSearch"
+            component={JobSearchScreen}
+            options={{
+              title: "Job Search",
+            }}
+          />
+          <Tab.Screen
+            name="SavedJobs"
+            component={SavedJobsScreen}
+            options={{
+              title: "Saved",
+            }}
+          />
+        </>
+      ) : user?.isEmployer() ? (
+        <Tab.Screen
+          name="MyJobPostings"
+          component={MyJobPostingsScreen}
+          options={{
+            title: "My Jobs",
+          }}
+        />
+      ) : null}
+
+      {/* Profile tab always visible */}
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}

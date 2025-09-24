@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import authService from "../services/authService";
+import User from "../models/User";
 
 // Action types
 const AUTH_ACTIONS = {
@@ -89,7 +90,8 @@ export function AuthProvider({ children }) {
       const userData = await AsyncStorage.getItem("user_data");
 
       if (token && userData) {
-        const user = JSON.parse(userData);
+        const parsedUserData = JSON.parse(userData);
+        const user = User.fromFirestore(parsedUserData, parsedUserData.id);
         dispatch({
           type: AUTH_ACTIONS.RESTORE_SESSION,
           payload: { token, user },
@@ -116,13 +118,16 @@ export function AuthProvider({ children }) {
         // Generate a simple token (in production, this would come from your backend)
         const token = `token_${Date.now()}_${result.user.id}`;
 
+        // Create User instance from the result
+        const user = User.fromFirestore(result.user, result.user.id);
+
         // Store in AsyncStorage
         await AsyncStorage.setItem("auth_token", token);
         await AsyncStorage.setItem("user_data", JSON.stringify(result.user));
 
         dispatch({
           type: AUTH_ACTIONS.LOGIN_SUCCESS,
-          payload: { user: result.user, token },
+          payload: { user, token },
         });
 
         return { success: true };

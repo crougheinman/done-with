@@ -16,7 +16,8 @@ class DataSeeder {
     try {
       console.log("🌱 Starting database seeding...");
 
-      await this.seedJobPostings();
+      const employerIds = await this.seedUsers();
+      await this.seedJobPostings(employerIds);
 
       console.log("✅ Database seeding completed successfully!");
     } catch (error) {
@@ -26,9 +27,83 @@ class DataSeeder {
   }
 
   /**
+   * Seed users (employers and applicants)
+   */
+  async seedUsers() {
+    console.log("👥 Seeding users...");
+
+    const users = [
+      {
+        email: "employer@techcorp.com",
+        name: "John Smith",
+        password: "password123",
+        userType: "employer",
+        bio: "TechCorp CEO passionate about building great products",
+        location: "San Francisco, CA",
+        rating: 4.8,
+        totalSales: 0,
+      },
+      {
+        email: "employer@startupxyz.com",
+        name: "Sarah Johnson",
+        password: "password123",
+        userType: "employer",
+        bio: "Startup founder looking for talented developers",
+        location: "Austin, TX",
+        rating: 4.5,
+        totalSales: 0,
+      },
+      {
+        email: "applicant1@example.com",
+        name: "Alice Developer",
+        password: "password123",
+        userType: "applicant",
+        bio: "Full-stack developer with 3 years experience",
+        location: "New York, NY",
+        rating: 0,
+        totalSales: 0,
+      },
+      {
+        email: "applicant2@example.com",
+        name: "Bob Engineer",
+        password: "password123",
+        userType: "applicant",
+        bio: "Software engineer specializing in React and Node.js",
+        location: "Los Angeles, CA",
+        rating: 0,
+        totalSales: 0,
+      },
+    ];
+
+    const employerIds = [];
+
+    for (const userData of users) {
+      try {
+        const userId = await this.firestoreService.createUser(userData);
+        console.log(
+          `   ✅ Created user: ${userData.name} (${userData.userType})`
+        );
+
+        if (userData.userType === "employer") {
+          employerIds.push(userId);
+        }
+      } catch (error) {
+        console.error(`   ❌ Error creating user ${userData.name}:`, error);
+      }
+    }
+
+    console.log(
+      `   📊 Created ${employerIds.length} employers and ${
+        users.length - employerIds.length
+      } applicants`
+    );
+    return employerIds;
+  }
+
+  /**
    * Seed job postings
    */
-  async seedJobPostings() {
+  async seedJobPostings(employerIds) {
     console.log("💼 Seeding job postings...");
 
     const jobPostings = [
@@ -68,6 +143,7 @@ class DataSeeder {
         ],
         additionalNotes:
           "Join our innovative team building the future of enterprise software.",
+        employerId: employerIds[0], // TechCorp employer
       },
       {
         jobTitle: "Frontend Developer",
@@ -104,6 +180,7 @@ class DataSeeder {
         ],
         additionalNotes:
           "Fast-paced startup environment with growth opportunities.",
+        employerId: employerIds[1], // StartupXYZ employer
       },
       {
         jobTitle: "Product Manager",

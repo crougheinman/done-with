@@ -10,13 +10,14 @@ const AUTH_ACTIONS = {
   LOGOUT: "LOGOUT",
   RESTORE_SESSION: "RESTORE_SESSION",
   REFRESH_TOKEN: "REFRESH_TOKEN",
+  SET_LOADING: "SET_LOADING",
 };
 
 // Initial state
 const initialState = {
   user: null,
   token: null,
-  isLoading: false,
+  isLoading: true, // Start with loading true for session restoration
   isAuthenticated: false,
   error: null,
 };
@@ -51,6 +52,7 @@ function authReducer(state, action) {
     case AUTH_ACTIONS.LOGOUT:
       return {
         ...initialState,
+        isLoading: false, // Ensure loading is false after logout
       };
     case AUTH_ACTIONS.RESTORE_SESSION:
       return {
@@ -58,6 +60,11 @@ function authReducer(state, action) {
         isAuthenticated: !!action.payload.token,
         user: action.payload.user,
         token: action.payload.token,
+      };
+    case AUTH_ACTIONS.SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
       return state;
@@ -90,6 +97,12 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error("Error restoring session:", error);
+    } finally {
+      // Always set loading to false after session restoration attempt
+      dispatch({
+        type: "SET_LOADING",
+        payload: false,
+      });
     }
   };
 

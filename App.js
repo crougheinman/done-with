@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -8,7 +8,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { AuthProvider } from "./app/contexts/AuthContext";
+import { AuthProvider, useAuth } from "./app/contexts/AuthContext";
 import WelcomePage from "./app/pages/WelcomePage";
 import LoginPage from "./app/pages/LoginPage";
 import SignUpPage from "./app/pages/SignUpPage";
@@ -72,20 +72,38 @@ function MainTabs() {
   );
 }
 
+// App Navigator that handles authentication-based routing
+function AppNavigator() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  return (
+    <Stack.Navigator
+      initialRouteName={isAuthenticated ? "MainTabs" : "Welcome"}
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Welcome" component={WelcomePage} />
+      <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Screen name="SignUp" component={SignUpPage} />
+      <Stack.Screen name="MainTabs" component={MainTabs} />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
         <SafeAreaProvider>
-          <Stack.Navigator
-            initialRouteName="Welcome"
-            screenOptions={{ headerShown: false }}
-          >
-            <Stack.Screen name="Welcome" component={WelcomePage} />
-            <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen name="SignUp" component={SignUpPage} />
-            <Stack.Screen name="MainTabs" component={MainTabs} />
-          </Stack.Navigator>
+          <AppNavigator />
           <StatusBar style="auto" />
         </SafeAreaProvider>
       </NavigationContainer>
@@ -94,9 +112,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loadingContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
   },

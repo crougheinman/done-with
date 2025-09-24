@@ -13,15 +13,22 @@ service cloud.firestore {
       allow read: if true;
     }
 
-    // Jobs collection - for job listings
-    match /jobs/{jobId} {
-      // Allow anyone to read jobs (for browsing)
+    // Job Postings collection - for job listings in job-seeking app
+    match /jobPostings/{jobPostingId} {
+      // Allow anyone to read job postings (for browsing by job seekers)
       allow read: if true;
-      // Allow authenticated users to create jobs
-      allow create: if request.auth != null;
-      // Allow users to modify only their own jobs
+      // Allow anyone to create job postings during development/seeding
+      // TODO: Change to authenticated users only in production
+      allow create: if true;
+      // Allow users to modify/delete only their own job postings
+      // Note: This assumes job postings will have a posterId field
       allow update, delete: if request.auth != null &&
         request.auth.uid == resource.data.posterId;
+    }
+
+    // Test collection - temporary for testing
+    match /test/{testId} {
+      allow read, write: if true;
     }
   }
 }

@@ -1,7 +1,7 @@
 /**
  * JobPostings model for standardizing job posting data structure and operations
  */
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 
 class JobPostings {
   constructor(data = {}) {
@@ -95,10 +95,16 @@ class JobPostings {
 
     // Include timestamps if they exist, converting Date objects to Timestamps
     if (this.createdAt) {
-      data.createdAt = this.createdAt instanceof Date ? Timestamp.fromDate(this.createdAt) : this.createdAt;
+      data.createdAt =
+        this.createdAt instanceof Date
+          ? Timestamp.fromDate(this.createdAt)
+          : this.createdAt;
     }
     if (this.updatedAt) {
-      data.updatedAt = this.updatedAt instanceof Date ? Timestamp.fromDate(this.updatedAt) : this.updatedAt;
+      data.updatedAt =
+        this.updatedAt instanceof Date
+          ? Timestamp.fromDate(this.updatedAt)
+          : this.updatedAt;
     }
     // Temporarily comment out postedDate to test
     // if (this.postedDate) {

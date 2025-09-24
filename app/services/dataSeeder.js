@@ -1296,39 +1296,44 @@ class DataSeeder {
           location: jobData.location,
           employmentType: jobData.employmentType,
         };
-        
-        console.log('Minimal firestore data:', JSON.stringify(minimalJobData, null, 2));
-        
+
+        console.log(
+          "Minimal firestore data:",
+          JSON.stringify(minimalJobData, null, 2)
+        );
+
         // Get the existing Firebase app instead of initializing a new one
-        const { getApps, getApp } = await import('firebase/app');
-        const { getFirestore, collection, addDoc, Timestamp } = await import('firebase/firestore');
-        
+        const { getApps, getApp } = await import("firebase/app");
+        const { getFirestore, collection, addDoc, Timestamp } = await import(
+          "firebase/firestore"
+        );
+
         let app;
         if (getApps().length > 0) {
-          console.log('Using existing Firebase app');
+          console.log("Using existing Firebase app");
           app = getApp();
         } else {
-          console.log('No existing Firebase app found');
+          console.log("No existing Firebase app found");
           // This shouldn't happen in the seeder context
           return;
         }
-        
+
         const db = getFirestore(app);
-        
-        console.log('Testing write to test collection...');
+
+        console.log("Testing write to test collection...");
         const testRef = await addDoc(collection(db, "test"), {
           message: "Test from seeder using existing app",
           timestamp: Timestamp.now(),
         });
-        console.log('✅ Test collection write successful, ID:', testRef.id);
-        
+        console.log("✅ Test collection write successful, ID:", testRef.id);
+
         // Now try the job posting
         const docRef = await addDoc(collection(db, "jobPostings"), {
           ...minimalJobData,
           createdAt: Timestamp.now(),
           updatedAt: Timestamp.now(),
         });
-        
+
         console.log(
           `  ✓ Created minimal job posting: ${jobData.jobTitle} at ${jobData.companyName} (ID: ${docRef.id})`
         );

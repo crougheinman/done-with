@@ -36,7 +36,12 @@ try {
 }
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, Timestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import JobPostings from "../app/models/JobPostings.js";
 
 const firebaseConfig = {
@@ -126,8 +131,7 @@ const jobPostings = [
       "Professional Development Budget",
       "Flexible Hours",
     ],
-    additionalNotes:
-      "Work on exciting projects with a passionate team.",
+    additionalNotes: "Work on exciting projects with a passionate team.",
   },
   {
     jobTitle: "Data Scientist",
@@ -141,14 +145,7 @@ const jobPostings = [
     salary: "$110,000 - $140,000",
     postedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     applicationVolume: "Medium",
-    skills: [
-      "Python",
-      "R",
-      "SQL",
-      "Machine Learning",
-      "Statistics",
-      "Tableau",
-    ],
+    skills: ["Python", "R", "SQL", "Machine Learning", "Statistics", "Tableau"],
     responsibilities: [
       "Analyze large datasets to extract insights",
       "Build predictive models and algorithms",
@@ -170,8 +167,7 @@ const jobPostings = [
       "Conference Budget",
       "Flexible PTO",
     ],
-    additionalNotes:
-      "Work on cutting-edge AI projects with real-world impact.",
+    additionalNotes: "Work on cutting-edge AI projects with real-world impact.",
   },
   {
     jobTitle: "UX/UI Designer",
@@ -185,7 +181,13 @@ const jobPostings = [
     salary: "$90,000 - $120,000",
     postedDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     applicationVolume: "Low",
-    skills: ["Figma", "Sketch", "Adobe Creative Suite", "Prototyping", "User Research"],
+    skills: [
+      "Figma",
+      "Sketch",
+      "Adobe Creative Suite",
+      "Prototyping",
+      "User Research",
+    ],
     responsibilities: [
       "Create intuitive user interfaces and experiences",
       "Conduct user research and usability testing",
@@ -242,8 +244,7 @@ const jobPostings = [
       "Cloud Certification Reimbursement",
       "Remote Work Options",
     ],
-    additionalNotes:
-      "Help build and maintain scalable cloud infrastructure.",
+    additionalNotes: "Help build and maintain scalable cloud infrastructure.",
   },
 ];
 

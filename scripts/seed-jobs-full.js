@@ -36,7 +36,12 @@ try {
 }
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, Timestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import JobPostings from "../app/models/JobPostings.js";
 
 const firebaseConfig = {
@@ -168,8 +173,7 @@ const jobPostings = [
       "Performance Bonus",
       "Professional Development",
     ],
-    additionalNotes:
-      "Lead product initiatives that impact millions of users.",
+    additionalNotes: "Lead product initiatives that impact millions of users.",
   },
   {
     jobTitle: "Data Scientist",
@@ -183,14 +187,7 @@ const jobPostings = [
     salary: "$110,000 - $140,000",
     postedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     applicationVolume: "Medium",
-    skills: [
-      "Python",
-      "R",
-      "SQL",
-      "Machine Learning",
-      "Statistics",
-      "Tableau",
-    ],
+    skills: ["Python", "R", "SQL", "Machine Learning", "Statistics", "Tableau"],
     responsibilities: [
       "Analyze large datasets to extract insights",
       "Build predictive models and algorithms",
@@ -212,8 +209,7 @@ const jobPostings = [
       "Conference Budget",
       "Flexible PTO",
     ],
-    additionalNotes:
-      "Work on cutting-edge AI projects with real-world impact.",
+    additionalNotes: "Work on cutting-edge AI projects with real-world impact.",
   },
   {
     jobTitle: "UX/UI Designer",
@@ -246,8 +242,7 @@ const jobPostings = [
       "Strong portfolio demonstrating design process",
       "Understanding of user-centered design principles",
     ],
-    educationRequirement:
-      "Bachelor's degree in Design, HCI, or related field",
+    educationRequirement: "Bachelor's degree in Design, HCI, or related field",
     experienceRequirement: "3+ years",
     benefits: [
       "Health Insurance",
@@ -369,8 +364,7 @@ const jobPostings = [
       "Flexible Hours",
       "Team Retreats",
     ],
-    additionalNotes:
-      "Build amazing mobile experiences for millions of users.",
+    additionalNotes: "Build amazing mobile experiences for millions of users.",
   },
   {
     jobTitle: "Security Engineer",
@@ -403,8 +397,7 @@ const jobPostings = [
       "Experience with security tools and technologies",
       "Strong analytical and problem-solving skills",
     ],
-    educationRequirement:
-      "Bachelor's degree in Cybersecurity or related field",
+    educationRequirement: "Bachelor's degree in Cybersecurity or related field",
     experienceRequirement: "4+ years",
     benefits: [
       "Health Insurance",
@@ -412,8 +405,7 @@ const jobPostings = [
       "Security Certifications Paid",
       "Flexible PTO",
     ],
-    additionalNotes:
-      "Protect critical systems and data from cyber threats.",
+    additionalNotes: "Protect critical systems and data from cyber threats.",
   },
   {
     jobTitle: "QA Engineer",
@@ -708,8 +700,7 @@ const jobPostings = [
       "Commission Structure",
       "Flexible PTO",
     ],
-    additionalNotes:
-      "Help customers achieve their goals with our platform.",
+    additionalNotes: "Help customers achieve their goals with our platform.",
   },
   {
     jobTitle: "Blockchain Developer",
@@ -838,8 +829,7 @@ const jobPostings = [
       "Certification Support",
       "Flexible PTO",
     ],
-    additionalNotes:
-      "Ensure data integrity and optimal database performance.",
+    additionalNotes: "Ensure data integrity and optimal database performance.",
   },
   {
     jobTitle: "Content Marketing Specialist",
@@ -968,8 +958,7 @@ const jobPostings = [
       "Flexible Hours",
       "Team Building Events",
     ],
-    additionalNotes:
-      "Create amazing gaming experiences for players worldwide.",
+    additionalNotes: "Create amazing gaming experiences for players worldwide.",
   },
   {
     jobTitle: "HR Business Partner",
@@ -1044,8 +1033,7 @@ const jobPostings = [
       "Strong analytical and problem-solving skills",
       "Security certifications (CISSP, CEH) preferred",
     ],
-    educationRequirement:
-      "Bachelor's degree in Cybersecurity or related field",
+    educationRequirement: "Bachelor's degree in Cybersecurity or related field",
     experienceRequirement: "3+ years",
     benefits: [
       "Health Insurance",
@@ -1138,8 +1126,7 @@ const jobPostings = [
       "Hardware Allowance",
       "Professional Development",
     ],
-    additionalNotes:
-      "Build the next generation of IoT devices and systems.",
+    additionalNotes: "Build the next generation of IoT devices and systems.",
   },
   {
     jobTitle: "Data Engineer",
@@ -1261,8 +1248,7 @@ const jobPostings = [
       "Executive Bonus",
       "Professional Development",
     ],
-    additionalNotes:
-      "Design the technology foundation for enterprise success.",
+    additionalNotes: "Design the technology foundation for enterprise success.",
   },
   {
     jobTitle: "Technical Support Engineer",
@@ -1303,8 +1289,7 @@ const jobPostings = [
       "Flexible Hours",
       "Remote Work Stipend",
     ],
-    additionalNotes:
-      "Help customers succeed with our products and services.",
+    additionalNotes: "Help customers succeed with our products and services.",
   },
 ];
 

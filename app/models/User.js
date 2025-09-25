@@ -1,10 +1,8 @@
 /**
  * User model for standardizing user data structure and operations
  */
+import { Timestamp } from "firebase/firestore";
 
-/**
- * User type enumeration
- */
 export const UserType = {
   APPLICANT: "applicant",
   EMPLOYER: "employer",
@@ -16,16 +14,27 @@ class User {
     this.email = data.email || "";
     this.password = data.password || ""; // Note: Only used during registration/login
     this.name = data.name || "";
-    this.userType = data.userType || UserType.APPLICANT; // Default to applicant
+    this.userType = data.userType || UserType.APPLICANT;
     this.avatar = data.avatar || "";
     this.bio = data.bio || "";
-    this.location = data.location || "";
+    this.address = data.address || "";
     this.rating = data.rating || 0;
     this.totalSales = data.totalSales || 0;
     this.follower = data.follower || 0;
     this.following = data.following || 0;
     this.createdAt = data.createdAt || null;
     this.updatedAt = data.updatedAt || null;
+
+    // New profile fields
+    this.degree = data.degree || "";
+    this.dateOfBirth = data.dateOfBirth || null;
+    this.gender = data.gender || "";
+    this.portfolioLink = data.portfolioLink || "";
+    this.addressDetails = data.addressDetails || {
+      province: "",
+      city: "",
+      baranggay: "",
+    };
   }
 
   /**
@@ -41,6 +50,7 @@ class User {
       // Convert Firestore Timestamps to Date objects if needed
       createdAt: docData.createdAt?.toDate?.() || docData.createdAt,
       updatedAt: docData.updatedAt?.toDate?.() || docData.updatedAt,
+      dateOfBirth: docData.dateOfBirth?.toDate?.() || docData.dateOfBirth,
     });
   }
 
@@ -55,9 +65,17 @@ class User {
       userType: this.userType,
       avatar: this.avatar,
       bio: this.bio,
-      location: this.location,
+      address: this.address,
       rating: this.rating,
       totalSales: this.totalSales,
+      degree: this.degree,
+      dateOfBirth:
+        this.dateOfBirth instanceof Date
+          ? Timestamp.fromDate(this.dateOfBirth)
+          : this.dateOfBirth,
+      gender: this.gender,
+      portfolioLink: this.portfolioLink,
+      addressDetails: this.addressDetails,
     };
 
     // Only include password for new user creation
@@ -67,10 +85,16 @@ class User {
 
     // Include timestamps if they exist
     if (this.createdAt) {
-      data.createdAt = this.createdAt;
+      data.createdAt =
+        this.createdAt instanceof Date
+          ? Timestamp.fromDate(this.createdAt)
+          : this.createdAt;
     }
     if (this.updatedAt) {
-      data.updatedAt = this.updatedAt;
+      data.updatedAt =
+        this.updatedAt instanceof Date
+          ? Timestamp.fromDate(this.updatedAt)
+          : this.updatedAt;
     }
 
     return data;
@@ -88,9 +112,14 @@ class User {
       userType: this.userType,
       avatar: this.avatar,
       bio: this.bio,
-      location: this.location,
+      address: this.address,
       rating: this.rating,
       totalSales: this.totalSales,
+      degree: this.degree,
+      dateOfBirth: this.dateOfBirth,
+      gender: this.gender,
+      portfolioLink: this.portfolioLink,
+      addressDetails: this.addressDetails,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
@@ -120,6 +149,42 @@ class User {
   }
 
   /**
+   * Get user age calculated from dateOfBirth
+   * @returns {number|null} User age in years or null if dateOfBirth not set
+   */
+  getAge() {
+    if (!this.dateOfBirth) return null;
+
+    const today = new Date();
+    const birthDate = new Date(this.dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
+   * Validate URL format
+   * @param {string} url - URL to validate
+   * @returns {boolean} True if URL is valid
+   */
+  isValidUrl(url) {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
    * Validate user data for registration
    * @returns {object} Validation result with isValid boolean and errors array
    */
@@ -140,6 +205,23 @@ class User {
 
     if (!this.userType || !Object.values(UserType).includes(this.userType)) {
       errors.push("Valid user type is required");
+    }
+
+    // Validate new fields
+    if (this.portfolioLink && !this.isValidUrl(this.portfolioLink)) {
+      errors.push("Portfolio link must be a valid URL");
+    }
+
+    if (this.dateOfBirth) {
+      const age = this.getAge();
+      if (age !== null && (age < 16 || age > 100)) {
+        errors.push("Age must be between 16 and 100 years");
+      }
+    }
+
+    const validGenders = ["Male", "Female", "Other"];
+    if (this.gender && !validGenders.includes(this.gender)) {
+      errors.push("Gender must be Male, Female, or Other");
     }
 
     return {

@@ -247,7 +247,9 @@ function SignUpPage({ navigation }) {
                     formData.userType === UserType.APPLICANT &&
                       styles.userTypeButtonActive,
                   ]}
-                  onPress={() => handleInputChange("userType", UserType.APPLICANT)}
+                  onPress={() =>
+                    handleInputChange("userType", UserType.APPLICANT)
+                  }
                 >
                   <Text
                     style={[
@@ -265,7 +267,9 @@ function SignUpPage({ navigation }) {
                     formData.userType === UserType.EMPLOYER &&
                       styles.userTypeButtonActive,
                   ]}
-                  onPress={() => handleInputChange("userType", UserType.EMPLOYER)}
+                  onPress={() =>
+                    handleInputChange("userType", UserType.EMPLOYER)
+                  }
                 >
                   <Text
                     style={[

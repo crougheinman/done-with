@@ -53,10 +53,29 @@ function ProfileScreen({ navigation }) {
           </View>
         </View>
 
+        <View style={styles.actionContainer}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => navigation.navigate("ProfileEdit")}
+          >
+            <Text style={styles.editButtonText}>Edit Profile</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.editButton, styles.viewPublicButton]}
+            onPress={() =>
+              navigation.navigate("PublicProfile", { userId: user?.id })
+            }
+          >
+            <Text style={[styles.editButtonText, styles.viewPublicButtonText]}>
+              View Public Profile
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.placeholderContent}>
           <Text style={styles.placeholderText}>
-            Profile settings, edit profile, account preferences, and other user
-            management features will be available here.
+            Additional profile features will be available here.
           </Text>
         </View>
       </View>
@@ -161,6 +180,31 @@ const styles = StyleSheet.create({
     fontSize: metrics.text.small,
     color: colors.textSecondary,
     marginTop: metrics.spacing.xs,
+  },
+  actionContainer: {
+    width: "100%",
+    marginBottom: metrics.spacing.l,
+  },
+  editButton: {
+    backgroundColor: colors.primary,
+    paddingVertical: metrics.spacing.m,
+    paddingHorizontal: metrics.spacing.l,
+    borderRadius: metrics.borderRadius.m,
+    alignItems: "center",
+    marginBottom: metrics.spacing.l, // Increased spacing between buttons
+  },
+  viewPublicButton: {
+    backgroundColor: colors.secondary,
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  viewPublicButtonText: {
+    color: colors.primary,
+  },
+  editButtonText: {
+    color: colors.secondary,
+    fontSize: metrics.text.regular,
+    fontWeight: "600",
   },
   placeholderContent: {
     backgroundColor: colors.feedBackground,

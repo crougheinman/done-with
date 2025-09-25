@@ -158,10 +158,33 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const updateUser = async (updatedUserData) => {
+    try {
+      // Update the user in state
+      const updatedUser = User.fromFirestore(
+        updatedUserData,
+        updatedUserData.id
+      );
+      dispatch({
+        type: AUTH_ACTIONS.RESTORE_SESSION,
+        payload: { token: state.token, user: updatedUser },
+      });
+
+      // Update AsyncStorage
+      await AsyncStorage.setItem("user_data", JSON.stringify(updatedUserData));
+
+      return { success: true };
+    } catch (error) {
+      console.error("Error updating user:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = {
     ...state,
     login,
     logout,
+    updateUser,
     restoreSession,
   };
 

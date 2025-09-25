@@ -20,6 +20,8 @@ import LoginPage from "./app/pages/LoginPage";
 import SignUpPage from "./app/pages/SignUpPage";
 import JobSearchScreen from "./app/pages/JobSearchScreen";
 import ProfileScreen from "./app/pages/ProfileScreen";
+import ProfileEditScreen from "./app/pages/ProfileEditScreen";
+import PublicProfileScreen from "./app/pages/PublicProfileScreen";
 import SavedJobsScreen from "./app/pages/SavedJobsScreen";
 import MyJobPostingsScreen from "./app/pages/MyJobPostingsScreen";
 import colors from "./app/theme/colors";
@@ -130,6 +132,8 @@ function AppNavigator() {
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="SignUp" component={SignUpPage} />
       <Stack.Screen name="MainTabs" component={MainTabs} />
+      <Stack.Screen name="ProfileEdit" component={ProfileEditScreen} />
+      <Stack.Screen name="PublicProfile" component={PublicProfileScreen} />
     </Stack.Navigator>
   );
 }

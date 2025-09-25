@@ -400,7 +400,7 @@ console.log(user.getUserTypeDisplay()); // "Applicant" or "Employer"
 import { UserType } from "../models/User";
 
 UserType.APPLICANT; // "applicant"
-UserType.EMPLOYER;  // "employer"
+UserType.EMPLOYER; // "employer"
 ```
 
 ### JobPostings Model Pattern

@@ -92,7 +92,22 @@ function JobSearchScreen({ navigation }) {
     <View style={styles.jobCard}>
       {/* Header */}
       <View style={styles.cardHeader}>
-        <View style={styles.companyInfo}>
+        <TouchableOpacity
+          style={styles.companyInfo}
+          onPress={() => {
+            console.log(
+              "Company pressed:",
+              item.companyName,
+              "employerId:",
+              item.employerId
+            );
+            if (item.employerId) {
+              navigation.navigate("PublicProfile", { userId: item.employerId });
+            } else {
+              console.log("No employerId found for company:", item.companyName);
+            }
+          }}
+        >
           <View style={styles.companyAvatar}>
             <Text style={styles.companyAvatarText}>
               {item.companyName.charAt(0).toUpperCase()}
@@ -101,8 +116,9 @@ function JobSearchScreen({ navigation }) {
           <View>
             <Text style={styles.companyName}>{item.companyName}</Text>
             <Text style={styles.jobLocation}>{item.location}</Text>
+            <Text style={styles.viewProfileText}>View Profile</Text>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={styles.jobMeta}>
           <Text style={styles.postedDate}>
             {item.postedDate
@@ -280,6 +296,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.textPrimary,
     marginBottom: 2,
+  },
+  viewProfileText: {
+    fontSize: metrics.text.small,
+    color: colors.primary,
+    fontWeight: "500",
   },
   jobLocation: {
     fontSize: metrics.text.small,

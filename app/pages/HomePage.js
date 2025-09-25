@@ -21,11 +21,11 @@ function HomePage({ navigation }) {
         <Text style={styles.userText}>Hello, {user?.name || "User"}!</Text>
         <Text style={styles.userTypeText}>
           You are registered as:{" "}
-          {user?.userType === "employer" ? "Employer" : "Job Applicant"}
+          {user?.isEmployer() ? "Employer" : "Job Applicant"}
         </Text>
 
         <View style={styles.userTypeContainer}>
-          {user?.userType === "employer" ? (
+          {user?.isEmployer() ? (
             <View style={styles.infoCard}>
               <Text style={styles.cardTitle}>Employer Dashboard</Text>
               <Text style={styles.cardText}>

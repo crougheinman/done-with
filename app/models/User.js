@@ -1,18 +1,29 @@
 /**
  * User model for standardizing user data structure and operations
  */
+
+/**
+ * User type enumeration
+ */
+export const UserType = {
+  APPLICANT: "applicant",
+  EMPLOYER: "employer",
+};
+
 class User {
   constructor(data = {}) {
     this.id = data.id || null;
     this.email = data.email || "";
     this.password = data.password || ""; // Note: Only used during registration/login
     this.name = data.name || "";
-    this.userType = data.userType || "applicant"; // "applicant" or "employer"
+    this.userType = data.userType || UserType.APPLICANT; // Default to applicant
     this.avatar = data.avatar || "";
     this.bio = data.bio || "";
     this.location = data.location || "";
     this.rating = data.rating || 0;
     this.totalSales = data.totalSales || 0;
+    this.follower = data.follower || 0;
+    this.following = data.following || 0;
     this.createdAt = data.createdAt || null;
     this.updatedAt = data.updatedAt || null;
   }
@@ -127,8 +138,8 @@ class User {
       errors.push("Name is required");
     }
 
-    if (!this.userType || !["applicant", "employer"].includes(this.userType)) {
-      errors.push("Valid user type is required (applicant or employer)");
+    if (!this.userType || !Object.values(UserType).includes(this.userType)) {
+      errors.push("Valid user type is required");
     }
 
     return {
@@ -190,7 +201,7 @@ class User {
    * @returns {boolean} True if user is an applicant
    */
   isApplicant() {
-    return this.userType === "applicant";
+    return this.userType === UserType.APPLICANT;
   }
 
   /**
@@ -198,7 +209,7 @@ class User {
    * @returns {boolean} True if user is an employer
    */
   isEmployer() {
-    return this.userType === "employer";
+    return this.userType === UserType.EMPLOYER;
   }
 
   /**
@@ -206,7 +217,7 @@ class User {
    * @returns {string} Formatted user type
    */
   getUserTypeDisplay() {
-    return this.userType === "employer" ? "Employer" : "Applicant";
+    return this.userType === UserType.EMPLOYER ? "Employer" : "Applicant";
   }
 
   /**

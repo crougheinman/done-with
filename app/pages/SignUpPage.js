@@ -15,6 +15,7 @@ import colors from "../theme/colors";
 import metrics from "../theme/metrics";
 import defaultStyles from "../theme/styles";
 import authService from "../services/authService";
+import { UserType } from "../models/User";
 
 function SignUpPage({ navigation }) {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ function SignUpPage({ navigation }) {
     email: "",
     password: "",
     confirmPassword: "",
-    userType: "applicant", // Default to applicant
+    userType: UserType.APPLICANT, // Default to applicant
   });
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -61,7 +62,7 @@ function SignUpPage({ navigation }) {
 
     if (
       !formData.userType ||
-      !["applicant", "employer"].includes(formData.userType)
+      !Object.values(UserType).includes(formData.userType)
     ) {
       newErrors.userType = "Please select a user type";
     }
@@ -243,15 +244,15 @@ function SignUpPage({ navigation }) {
                 <TouchableOpacity
                   style={[
                     styles.userTypeButton,
-                    formData.userType === "applicant" &&
+                    formData.userType === UserType.APPLICANT &&
                       styles.userTypeButtonActive,
                   ]}
-                  onPress={() => handleInputChange("userType", "applicant")}
+                  onPress={() => handleInputChange("userType", UserType.APPLICANT)}
                 >
                   <Text
                     style={[
                       styles.userTypeButtonText,
-                      formData.userType === "applicant" &&
+                      formData.userType === UserType.APPLICANT &&
                         styles.userTypeButtonTextActive,
                     ]}
                   >
@@ -261,15 +262,15 @@ function SignUpPage({ navigation }) {
                 <TouchableOpacity
                   style={[
                     styles.userTypeButton,
-                    formData.userType === "employer" &&
+                    formData.userType === UserType.EMPLOYER &&
                       styles.userTypeButtonActive,
                   ]}
-                  onPress={() => handleInputChange("userType", "employer")}
+                  onPress={() => handleInputChange("userType", UserType.EMPLOYER)}
                 >
                   <Text
                     style={[
                       styles.userTypeButtonText,
-                      formData.userType === "employer" &&
+                      formData.userType === UserType.EMPLOYER &&
                         styles.userTypeButtonTextActive,
                     ]}
                   >

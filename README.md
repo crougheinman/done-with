@@ -375,3 +375,33 @@ This project is licensed under the MIT License - see the LICENSE file for detail
    - Check that all dependencies are installed: `npm install`
 
 For more help, please [open an issue](https://github.com/crougheinman/done-with/issues)
+
+App features
+
+Users
+Profile
+Edit
+Overview
+Title
+Full-time
+Part-time
+Expected Salary - per hour
+Basic Information
+Date of Birth(Age)
+Gender
+Porfolio/ Website Link
+Address
+Educational Background
+Employment History
+Account Settings
+
+Skills
+Skill Name
+Proficiency (P1 - P5)
+Years of Experience
+
+Job
+Job Searching
+Job Feed
+Saved Jobs
+Job Applications

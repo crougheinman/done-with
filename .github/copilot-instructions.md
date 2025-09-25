@@ -364,7 +364,7 @@ const renderJobCard = ({ item }) => (
 **Always use the User model for user data:**
 
 ```javascript
-import User from "../models/User";
+import User, { UserType } from "../models/User";
 
 // Create from Firestore data
 const user = User.fromFirestore(firestoreData, docId);
@@ -374,7 +374,7 @@ const newUser = new User({
   email: "user@example.com",
   name: "User Name",
   password: "password123",
-  userType: "applicant", // or "employer"
+  userType: UserType.APPLICANT, // or UserType.EMPLOYER
 });
 
 // Validate before operations
@@ -391,7 +391,16 @@ console.log(user.getDisplayName()); // "User Name"
 console.log(user.getInitials()); // "UN"
 console.log(user.isApplicant()); // true/false
 console.log(user.isEmployer()); // true/false
-console.log(user.getUserTypeDisplay()); // "Job Seeker" or "Employer"
+console.log(user.getUserTypeDisplay()); // "Applicant" or "Employer"
+```
+
+**User Type Enum:**
+
+```javascript
+import { UserType } from "../models/User";
+
+UserType.APPLICANT; // "applicant"
+UserType.EMPLOYER;  // "employer"
 ```
 
 ### JobPostings Model Pattern

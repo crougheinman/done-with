@@ -1,5 +1,6 @@
 import firestoreService from "./firestoreService.js";
 import JobPostings from "../models/JobPostings.js";
+import { UserType } from "../models/User.js";
 
 /**
  * Seed Firestore with initial data for the DoneWithIt job-seeking app
@@ -37,7 +38,7 @@ class DataSeeder {
         email: "employer@techcorp.com",
         name: "John Smith",
         password: "password123",
-        userType: "employer",
+        userType: UserType.EMPLOYER,
         bio: "TechCorp CEO passionate about building great products",
         location: "San Francisco, CA",
         rating: 4.8,
@@ -47,7 +48,7 @@ class DataSeeder {
         email: "employer@startupxyz.com",
         name: "Sarah Johnson",
         password: "password123",
-        userType: "employer",
+        userType: UserType.EMPLOYER,
         bio: "Startup founder looking for talented developers",
         location: "Austin, TX",
         rating: 4.5,
@@ -57,7 +58,7 @@ class DataSeeder {
         email: "applicant1@example.com",
         name: "Alice Developer",
         password: "password123",
-        userType: "applicant",
+        userType: UserType.APPLICANT,
         bio: "Full-stack developer with 3 years experience",
         location: "New York, NY",
         rating: 0,
@@ -67,7 +68,7 @@ class DataSeeder {
         email: "applicant2@example.com",
         name: "Bob Engineer",
         password: "password123",
-        userType: "applicant",
+        userType: UserType.APPLICANT,
         bio: "Software engineer specializing in React and Node.js",
         location: "Los Angeles, CA",
         rating: 0,
@@ -84,7 +85,7 @@ class DataSeeder {
           `   ✅ Created user: ${userData.name} (${userData.userType})`
         );
 
-        if (userData.userType === "employer") {
+        if (userData.userType === UserType.EMPLOYER) {
           employerIds.push(userId);
         }
       } catch (error) {

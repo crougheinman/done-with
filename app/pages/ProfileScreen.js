@@ -37,19 +37,19 @@ function ProfileScreen({ navigation }) {
             <Text style={styles.userName}>{user?.name || "User"}</Text>
             <Text style={styles.userEmail}>{user?.email || ""}</Text>
             <Text style={styles.userType}>
-              {user?.userType === "employer" ? "Employer" : "Job Seeker"}
+              {user?.isEmployer() ? "Employer" : "Job Seeker"}
             </Text>
           </View>
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <Text style={styles.statNumber}>{user?.rating || 0}</Text>
-            <Text style={styles.statLabel}>Rating</Text>
+            <Text style={styles.statNumber}>{user?.following || 0}</Text>
+            <Text style={styles.statLabel}>Following</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={styles.statNumber}>{user?.totalSales || 0}</Text>
-            <Text style={styles.statLabel}>Total Sales</Text>
+            <Text style={styles.statNumber}>{user?.follower || 0}</Text>
+            <Text style={styles.statLabel}>Followers</Text>
           </View>
         </View>
 
